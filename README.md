@@ -6,7 +6,7 @@ Express 5 + Mongoose. Auth = JWT in httpOnly cookie `ovr_token`. Frontend: [`ovr
 
 ```bash
 cp .env.example .env   # set JWT_SECRET (32+ chars)
-npm i && npm run seed && npm run dev   # http://localhost:4000/api/health
+npm i && npm run seed && npm run dev   # http://localhost:4000/api/health (Docker image listens on 3000)
 ```
 
 ## Deploy on Railway
@@ -23,17 +23,17 @@ talks to the web domain (first-party cookie). **Don't** call this service's publ
    | `MONGODB_URI` | `${{MongoDB.MONGO_URL}}` |
    | `MONGODB_DB` | `ovrload` |
    | `JWT_SECRET` | `node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"` |
-   | `PORT` | `4000` (fixed, so the web service knows where to reach it) |
+   | `PORT` | `3000` (same as the Dockerfile; the web service's `API_UPSTREAM` must use this port) |
 
    The image sets `NODE_ENV=production` (Secure cookie) and `TRUST_PROXY=1` (the web nginx hop).
 4. No public domain needed. Note the service name — the web service uses
-   `http://${{<api-service>.RAILWAY_PRIVATE_DOMAIN}}:4000`.
+   `http://${{<api-service>.RAILWAY_PRIVATE_DOMAIN}}:3000`.
 
 Every start runs `src/seed/seed.js` first (idempotent upsert of the master exercise list).
 
 ```bash
 docker build -t ovrload-api .
-docker run --rm -p 4000:4000 -e MONGODB_URI=mongodb://host.docker.internal:27017 -e MONGODB_DB=ovrload \
+docker run --rm -p 3000:3000 -e MONGODB_URI=mongodb://host.docker.internal:27017 -e MONGODB_DB=ovrload \
   -e JWT_SECRET=<32+ chars> ovrload-api
 ```
 
