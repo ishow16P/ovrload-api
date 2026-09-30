@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 export const MUSCLE_GROUPS = ['chest', 'back', 'shoulders', 'biceps', 'triceps', 'legs', 'glutes', 'calves', 'core', 'full-body'];
-export const EQUIPMENT = ['barbell', 'dumbbell', 'machine', 'cable', 'bodyweight', 'kettlebell', 'ez-bar', 'smith-machine'];
+export const EQUIPMENT = ['barbell', 'dumbbell', 'machine', 'cable', 'bodyweight', 'kettlebell', 'ez-bar', 'smith-machine', 'other'];
 
 const exerciseSchema = new mongoose.Schema(
   {
